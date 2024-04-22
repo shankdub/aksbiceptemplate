@@ -4,26 +4,26 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.17.1.54307",
-      "templateHash": "9869833911753093594"
+      "version": "0.26.54.24096",
+      "templateHash": "7027999657185847395"
     }
   },
   "parameters": {
     "location": {
       "type": "string",
       "defaultValue": "[resourceGroup().location]",
+      "minLength": 2,
       "metadata": {
         "description": "The location to use for the deployment. defaults to Resource Groups location."
-      },
-      "minLength": 2
+      }
     },
     "resourceName": {
       "type": "string",
+      "minLength": 3,
+      "maxLength": 20,
       "metadata": {
         "description": "Used to name all resources"
-      },
-      "maxLength": 20,
-      "minLength": 3
+      }
     },
     "custom_vnet": {
       "type": "bool",
@@ -55,7 +55,7 @@
     },
     "byoUaiName": {
       "type": "string",
-      "defaultValue": "AKS-EAST-TF-UAMI",
+      "defaultValue": "",
       "metadata": {
         "description": "The name of an existing User Assigned Identity to use for the AKS Control Plane (in the same resouce group), requires rbac assignments to be done outside of this template"
       }
@@ -63,74 +63,74 @@
     "vnetAddressPrefix": {
       "type": "string",
       "defaultValue": "10.240.0.0/16",
+      "minLength": 9,
+      "maxLength": 18,
       "metadata": {
         "description": "The address range for the custom vnet"
-      },
-      "maxLength": 18,
-      "minLength": 9
+      }
     },
     "vnetAksSubnetAddressPrefix": {
       "type": "string",
       "defaultValue": "10.240.0.0/22",
+      "minLength": 9,
+      "maxLength": 18,
       "metadata": {
         "description": "The address range for AKS in your custom vnet"
-      },
-      "maxLength": 18,
-      "minLength": 9
+      }
     },
     "vnetAppGatewaySubnetAddressPrefix": {
       "type": "string",
       "defaultValue": "10.240.5.0/24",
+      "minLength": 9,
+      "maxLength": 18,
       "metadata": {
         "description": "The address range for the App Gateway in your custom vnet"
-      },
-      "maxLength": 18,
-      "minLength": 9
+      }
     },
     "acrAgentPoolSubnetAddressPrefix": {
       "type": "string",
       "defaultValue": "10.240.4.64/26",
+      "minLength": 9,
+      "maxLength": 18,
       "metadata": {
         "description": "The address range for the ACR in your custom vnet"
-      },
-      "maxLength": 18,
-      "minLength": 9
+      }
     },
     "bastionSubnetAddressPrefix": {
       "type": "string",
       "defaultValue": "10.240.4.128/26",
+      "minLength": 9,
+      "maxLength": 18,
       "metadata": {
         "description": "The address range for Azure Bastion in your custom vnet"
-      },
-      "maxLength": 18,
-      "minLength": 9
+      }
     },
     "privateLinkSubnetAddressPrefix": {
       "type": "string",
       "defaultValue": "10.240.4.192/26",
+      "minLength": 9,
+      "maxLength": 18,
       "metadata": {
         "description": "The address range for private link in your custom vnet"
-      },
-      "maxLength": 18,
-      "minLength": 9
+      }
     },
     "vnetFirewallSubnetAddressPrefix": {
       "type": "string",
       "defaultValue": "10.240.50.0/24",
+      "minLength": 9,
+      "maxLength": 18,
       "metadata": {
         "description": "The address range for Azure Firewall in your custom vnet"
-      },
-      "maxLength": 18,
-      "minLength": 9
+      }
     },
     "vnetFirewallManagementSubnetAddressPrefix": {
       "type": "string",
       "defaultValue": "10.240.51.0/26",
+      "minLength": 9,
+      "maxLength": 18,
       "metadata": {
         "description": "The address range for Azure Firewall Management in your custom vnet"
-      },
-      "maxLength": 18,
-      "minLength": 9
+      }
     },
     "privateLinks": {
       "type": "bool",
@@ -254,15 +254,15 @@
     "registries_sku": {
       "type": "string",
       "defaultValue": "",
-      "metadata": {
-        "description": "The SKU to use for the Container Registry"
-      },
       "allowedValues": [
         "",
         "Basic",
         "Standard",
         "Premium"
-      ]
+      ],
+      "metadata": {
+        "description": "The SKU to use for the Container Registry"
+      }
     },
     "enableACRTrustPolicy": {
       "type": "bool",
@@ -343,10 +343,10 @@
     "privateIpApplicationGateway": {
       "type": "string",
       "defaultValue": "",
+      "maxLength": 15,
       "metadata": {
         "description": "A known private ip in the Application Gateway subnet range to be allocated for internal traffic"
-      },
-      "maxLength": 15
+      }
     },
     "appgwKVIntegration": {
       "type": "bool",
@@ -358,13 +358,13 @@
     "appGWsku": {
       "type": "string",
       "defaultValue": "WAF_v2",
-      "metadata": {
-        "description": "The SKU for AppGw"
-      },
       "allowedValues": [
         "Standard_v2",
         "WAF_v2"
-      ]
+      ],
+      "metadata": {
+        "description": "The SKU for AppGw"
+      }
     },
     "appGWenableFirewall": {
       "type": "bool",
@@ -390,7 +390,7 @@
     },
     "kubernetesVersion": {
       "type": "string",
-      "defaultValue": "1.25.6",
+      "defaultValue": "1.28.5",
       "metadata": {
         "description": "Kubernetes Version"
       }
@@ -475,27 +475,27 @@
     "upgradeChannel": {
       "type": "string",
       "defaultValue": "none",
-      "metadata": {
-        "description": "AKS upgrade channel"
-      },
       "allowedValues": [
         "none",
         "patch",
         "stable",
         "rapid",
         "node-image"
-      ]
+      ],
+      "metadata": {
+        "description": "AKS upgrade channel"
+      }
     },
     "osDiskType": {
       "type": "string",
       "defaultValue": "Ephemeral",
-      "metadata": {
-        "description": "OS disk type"
-      },
       "allowedValues": [
         "Ephemeral",
         "Managed"
-      ]
+      ],
+      "metadata": {
+        "description": "OS disk type"
+      }
     },
     "agentVMSize": {
       "type": "string",
@@ -528,11 +528,18 @@
     "nodePoolName": {
       "type": "string",
       "defaultValue": "npuser01",
+      "minLength": 3,
+      "maxLength": 12,
       "metadata": {
         "description": "Name for user node pool"
-      },
-      "maxLength": 12,
-      "minLength": 3
+      }
+    },
+    "nodePoolSpot": {
+      "type": "bool",
+      "defaultValue": false,
+      "metadata": {
+        "description": "Config the user node pool as a spot instance"
+      }
     },
     "cniDynamicIpAllocation": {
       "type": "bool",
@@ -544,69 +551,69 @@
     "maxPods": {
       "type": "int",
       "defaultValue": 30,
+      "minValue": 10,
+      "maxValue": 250,
       "metadata": {
         "description": "The maximum number of pods per node."
-      },
-      "maxValue": 250,
-      "minValue": 10
+      }
     },
     "networkPlugin": {
       "type": "string",
       "defaultValue": "azure",
-      "metadata": {
-        "description": "The network plugin type"
-      },
       "allowedValues": [
         "azure",
         "kubenet"
-      ]
+      ],
+      "metadata": {
+        "description": "The network plugin type"
+      }
     },
     "networkPluginMode": {
       "type": "string",
       "defaultValue": "",
-      "metadata": {
-        "description": "The network plugin type"
-      },
       "allowedValues": [
         "",
         "Overlay"
-      ]
+      ],
+      "metadata": {
+        "description": "The network plugin type"
+      }
     },
-    "ebpfDataplane": {
+    "networkDataplane": {
       "type": "string",
       "defaultValue": "",
-      "metadata": {
-        "description": "Use Cilium dataplane (requires azure networkPlugin)"
-      },
       "allowedValues": [
         "",
         "cilium"
-      ]
+      ],
+      "metadata": {
+        "description": "Use Cilium dataplane (requires azure networkPlugin)"
+      }
     },
     "networkPolicy": {
       "type": "string",
       "defaultValue": "",
-      "metadata": {
-        "description": "The network policy to use."
-      },
       "allowedValues": [
         "",
         "azure",
         "calico",
         "cilium"
-      ]
+      ],
+      "metadata": {
+        "description": "The network policy to use."
+      }
     },
     "azurepolicy": {
       "type": "string",
       "defaultValue": "",
-      "metadata": {
-        "description": "Enable the Azure Policy addon"
-      },
       "allowedValues": [
         "",
         "audit",
         "deny"
-      ]
+      ],
+      "metadata": {
+        "description": "Enable the Azure Policy addon"
+      }
     },
     "azurePolicyInitiative": {
       "type": "string",
@@ -633,14 +640,14 @@
     "privateClusterDnsMethod": {
       "type": "string",
       "defaultValue": "system",
-      "metadata": {
-        "description": "Private cluster dns advertisment method, leverages the dnsApiPrivateZoneId parameter"
-      },
       "allowedValues": [
         "system",
         "none",
         "privateDnsZone"
-      ]
+      ],
+      "metadata": {
+        "description": "Private cluster dns advertisment method, leverages the dnsApiPrivateZoneId parameter"
+      }
     },
     "dnsApiPrivateZoneId": {
       "type": "string",
@@ -673,38 +680,29 @@
     "podCidr": {
       "type": "string",
       "defaultValue": "10.240.100.0/22",
+      "minLength": 9,
+      "maxLength": 18,
       "metadata": {
         "description": "The address range to use for pods"
-      },
-      "maxLength": 18,
-      "minLength": 9
+      }
     },
     "serviceCidr": {
       "type": "string",
       "defaultValue": "172.10.0.0/16",
+      "minLength": 9,
+      "maxLength": 18,
       "metadata": {
         "description": "The address range to use for services"
-      },
-      "maxLength": 18,
-      "minLength": 9
+      }
     },
     "dnsServiceIP": {
       "type": "string",
       "defaultValue": "172.10.0.10",
+      "minLength": 7,
+      "maxLength": 15,
       "metadata": {
         "description": "The IP address to reserve for DNS"
-      },
-      "maxLength": 15,
-      "minLength": 7
-    },
-    "dockerBridgeCidr": {
-      "type": "string",
-      "defaultValue": "172.17.0.1/16",
-      "metadata": {
-        "description": "The address range to use for the docker bridge"
-      },
-      "maxLength": 18,
-      "minLength": 9
+      }
     },
     "defenderForContainers": {
       "type": "bool",
@@ -723,15 +721,15 @@
     "SystemPoolType": {
       "type": "string",
       "defaultValue": "CostOptimised",
-      "metadata": {
-        "description": "The System Pool Preset sizing"
-      },
       "allowedValues": [
         "CostOptimised",
         "Standard",
         "HighSpec",
         "Custom"
-      ]
+      ],
+      "metadata": {
+        "description": "The System Pool Preset sizing"
+      }
     },
     "SystemPoolCustomPreset": {
       "type": "object",
@@ -765,15 +763,14 @@
     "aksOutboundTrafficType": {
       "type": "string",
       "defaultValue": "loadBalancer",
-      "metadata": {
-        "description": "Outbound traffic type for the egress traffic of your cluster"
-      },
       "allowedValues": [
         "loadBalancer",
-        "managedNATGateway",
-        "userAssignedNATGateway",
+        "natGateway",
         "userDefinedRouting"
-      ]
+      ],
+      "metadata": {
+        "description": "Outbound traffic type for the egress traffic of your cluster"
+      }
     },
     "createNatGateway": {
       "type": "bool",
@@ -785,20 +782,20 @@
     "natGwIpCount": {
       "type": "int",
       "defaultValue": 2,
+      "minValue": 1,
+      "maxValue": 16,
       "metadata": {
         "description": "The effective outbound IP resources of the cluster NAT gateway"
-      },
-      "maxValue": 16,
-      "minValue": 1
+      }
     },
     "natGwIdleTimeout": {
       "type": "int",
       "defaultValue": 30,
+      "minValue": 4,
+      "maxValue": 120,
       "metadata": {
         "description": "Outbound flow idle timeout in minutes for NatGw"
-      },
-      "maxValue": 120,
-      "minValue": 4
+      }
     },
     "oidcIssuer": {
       "type": "bool",
@@ -828,44 +825,67 @@
     "managedNodeResourceGroup": {
       "type": "string",
       "defaultValue": "",
+      "maxLength": 80,
       "metadata": {
         "description": "The name of the NEW resource group to create the AKS cluster managed resources in"
-      },
-      "maxLength": 80
+      }
     },
     "restrictionLevelNodeResourceGroup": {
       "type": "string",
       "defaultValue": "Unrestricted",
-      "metadata": {
-        "description": "The restriction level applied to the cluster node resource group"
-      },
       "allowedValues": [
         "ReadOnly",
         "Unrestricted"
-      ]
+      ],
+      "metadata": {
+        "description": "The restriction level applied to the cluster node resource group"
+      }
+    },
+    "serviceMeshProfile": {
+      "type": "string",
+      "defaultValue": "",
+      "allowedValues": [
+        "",
+        "Istio"
+      ],
+      "metadata": {
+        "description": "The service mesh profile to use"
+      }
+    },
+    "istioIngressGatewayMode": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The ingress gateway to use for the Istio service mesh"
+      }
+    },
+    "istioRevision": {
+      "type": "string",
+      "defaultValue": "asm-1-20"
     },
     "osType": {
       "type": "string",
       "defaultValue": "Linux",
-      "metadata": {
-        "description": "The User Node pool OS"
-      },
       "allowedValues": [
         "Linux",
         "Windows"
-      ]
+      ],
+      "metadata": {
+        "description": "The User Node pool OS"
+      }
     },
     "osSKU": {
       "type": "string",
       "defaultValue": "Ubuntu",
-      "metadata": {
-        "description": "The User Node pool OS SKU"
-      },
       "allowedValues": [
+        "AzureLinux",
         "Ubuntu",
         "Windows2019",
         "Windows2022"
-      ]
+      ],
+      "metadata": {
+        "description": "User Node pool OS SKU"
+      }
     },
     "automatedDeployment": {
       "type": "bool",
@@ -928,13 +948,13 @@
     "AksMetricAlertMetricFrequencyModel": {
       "type": "string",
       "defaultValue": "Long",
-      "metadata": {
-        "description": "Which Metric polling frequency model to use"
-      },
       "allowedValues": [
         "Short",
         "Long"
-      ]
+      ],
+      "metadata": {
+        "description": "Which Metric polling frequency model to use"
+      }
     },
     "retentionInDays": {
       "type": "int",
@@ -963,6 +983,47 @@
       "metadata": {
         "description": "Enable usage and telemetry feedback to Microsoft."
       }
+    },
+    "automationAccountScheduledStartStop": {
+      "type": "string",
+      "defaultValue": "",
+      "allowedValues": [
+        "",
+        "Weekday",
+        "Day"
+      ],
+      "metadata": {
+        "category": "Automation",
+        "description": "Creates an Azure Automation Account to provide scheduled start and stop of the cluster"
+      }
+    },
+    "automationTimeZone": {
+      "type": "string",
+      "defaultValue": "Etc/UTC",
+      "metadata": {
+        "category": "Automation",
+        "description": "The IANA time zone of the automation account"
+      }
+    },
+    "automationStartHour": {
+      "type": "int",
+      "defaultValue": 8,
+      "metadata": {
+        "category": "Automation",
+        "description": "When to start the cluster"
+      },
+      "minValue": 0,
+      "maxValue": 23
+    },
+    "automationStopHour": {
+      "type": "int",
+      "defaultValue": 19,
+      "metadata": {
+        "category": "Automation",
+        "description": "When to stop the cluster"
+      },
+      "minValue": 0,
+      "maxValue": 23
     }
   },
   "variables": {
@@ -1006,6 +1067,18 @@
     "reader": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'acdd72a7-3385-48ef-bd42-f606fba81ae7')]",
     "managedIdentityOperator": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'f1a07417-d97a-45cb-824c-7a7467783830')]",
     "autoScale": "[greater(parameters('agentCountMax'), parameters('agentCount'))]",
+    "serviceMeshProfileObj": {
+      "istio": {
+        "components": {
+          "ingressGateways": "[if(empty(parameters('istioIngressGatewayMode')), null(), createArray(createObject('enabled', true(), 'mode', parameters('istioIngressGatewayMode'))))]"
+        },
+        "revisions": [
+          "[parameters('istioRevision')]"
+        ]
+      },
+      "mode": "Istio"
+    },
+    "outboundTrafficType": "[if(equals(parameters('aksOutboundTrafficType'), 'natGateway'), if(parameters('custom_vnet'), 'userAssignedNATGateway', 'managedNATGateway'), parameters('aksOutboundTrafficType'))]",
     "systemPoolPresets": {
       "CostOptimised": {
         "vmSize": "Standard_B4ms",
@@ -1063,6 +1136,7 @@
       }
     },
     "poolName": "[if(equals(parameters('osType'), 'Linux'), parameters('nodePoolName'), take(parameters('nodePoolName'), 6))]",
+    "defaultOsDiskSizeGB": "[if(equals(parameters('osType'), 'Linux'), 30, 100)]",
     "uaiNetworkScopeRbac": "[if(and(parameters('enablePrivateCluster'), not(empty(parameters('dnsApiPrivateZoneId')))), 'Vnet', 'Subnet')]",
     "policySetBaseline": "/providers/Microsoft.Authorization/policySetDefinitions/a8640138-9b0a-4a28-b8cb-1666c838647d",
     "policySetRestrictive": "/providers/Microsoft.Authorization/policySetDefinitions/42b8ef37-b724-4e24-bbc8-7a7708edfe00",
@@ -1081,7 +1155,8 @@
     "aks_law_name": "[format('log-{0}', parameters('resourceName'))]",
     "createLaw": "[or(or(or(or(parameters('omsagent'), variables('deployAppGw')), parameters('azureFirewalls')), parameters('CreateNetworkSecurityGroups')), parameters('defenderForContainers'))]",
     "MonitoringMetricsPublisherRole": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '3913510d-42f4-4e42-8a64-420c390055eb')]",
-    "telemetryId": "[format('3c1e2fc6-1c4b-44f9-8694-25d00ae30a3a-{0}', parameters('location'))]"
+    "telemetryId": "[format('3c1e2fc6-1c4b-44f9-8694-25d00ae30a3a-{0}', parameters('location'))]",
+    "automationFrequency": "[if(equals(parameters('automationAccountScheduledStartStop'), 'Day'), 'Day', 'Weekday')]"
   },
   "resources": [
     {
@@ -1094,7 +1169,7 @@
     {
       "condition": "[not(empty(parameters('registries_sku')))]",
       "type": "Microsoft.ContainerRegistry/registries",
-      "apiVersion": "2023-01-01-preview",
+      "apiVersion": "2023-07-01",
       "name": "[variables('acrName')]",
       "location": "[parameters('location')]",
       "sku": {
@@ -1149,7 +1224,7 @@
       "properties": {
         "roleDefinitionId": "[variables('AcrPullRole')]",
         "principalType": "ServicePrincipal",
-        "principalId": "[reference(resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('resourceName'))), '2023-03-02-preview').identityProfile.kubeletidentity.objectId]"
+        "principalId": "[reference(resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('resourceName'))), '2024-01-01').identityProfile.kubeletidentity.objectId]"
       },
       "dependsOn": [
         "[resourceId('Microsoft.ContainerRegistry/registries', variables('acrName'))]",
@@ -1182,7 +1257,7 @@
     {
       "condition": "[variables('deployAppGw')]",
       "type": "Microsoft.Network/publicIPAddresses",
-      "apiVersion": "2022-07-01",
+      "apiVersion": "2023-04-01",
       "name": "[format('pip-agw-{0}', parameters('resourceName'))]",
       "location": "[parameters('location')]",
       "sku": {
@@ -1196,7 +1271,7 @@
     {
       "condition": "[variables('deployAppGw')]",
       "type": "Microsoft.Network/applicationGateways",
-      "apiVersion": "2022-07-01",
+      "apiVersion": "2023-04-01",
       "name": "[variables('appgwName')]",
       "location": "[parameters('location')]",
       "zones": "[if(not(empty(parameters('availabilityZones'))), parameters('availabilityZones'), createArray())]",
@@ -1222,7 +1297,7 @@
       "properties": {
         "roleDefinitionId": "[variables('contributor')]",
         "principalType": "ServicePrincipal",
-        "principalId": "[reference(resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('resourceName'))), '2023-03-02-preview').addonProfiles.ingressApplicationGateway.identity.objectId]"
+        "principalId": "[reference(resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('resourceName'))), '2024-01-01').addonProfiles.ingressApplicationGateway.identity.objectId]"
       },
       "dependsOn": [
         "[resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('resourceName')))]",
@@ -1237,7 +1312,7 @@
       "properties": {
         "roleDefinitionId": "[variables('reader')]",
         "principalType": "ServicePrincipal",
-        "principalId": "[reference(resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('resourceName'))), '2023-03-02-preview').addonProfiles.ingressApplicationGateway.identity.objectId]"
+        "principalId": "[reference(resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('resourceName'))), '2024-01-01').addonProfiles.ingressApplicationGateway.identity.objectId]"
       },
       "dependsOn": [
         "[resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('resourceName')))]"
@@ -1252,7 +1327,7 @@
       "properties": {
         "roleDefinitionId": "[variables('managedIdentityOperator')]",
         "principalType": "ServicePrincipal",
-        "principalId": "[reference(resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('resourceName'))), '2023-03-02-preview').addonProfiles.ingressApplicationGateway.identity.objectId]"
+        "principalId": "[reference(resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('resourceName'))), '2024-01-01').addonProfiles.ingressApplicationGateway.identity.objectId]"
       },
       "dependsOn": [
         "[resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('resourceName')))]",
@@ -1289,10 +1364,10 @@
     },
     {
       "type": "Microsoft.ContainerService/managedClusters",
-      "apiVersion": "2023-03-02-preview",
+      "apiVersion": "2024-01-01",
       "name": "[format('aks-{0}', parameters('resourceName'))]",
       "location": "[parameters('location')]",
-      "properties": "[union(createObject('kubernetesVersion', parameters('kubernetesVersion'), 'enableRBAC', true(), 'dnsPrefix', parameters('dnsPrefix'), 'aadProfile', if(parameters('enable_aad'), createObject('managed', true(), 'enableAzureRBAC', parameters('enableAzureRBAC'), 'tenantID', parameters('aad_tenant_id')), null()), 'apiServerAccessProfile', if(not(empty(parameters('authorizedIPRanges'))), createObject('authorizedIPRanges', parameters('authorizedIPRanges')), createObject('enablePrivateCluster', parameters('enablePrivateCluster'), 'privateDNSZone', if(parameters('enablePrivateCluster'), variables('aksPrivateDnsZone'), ''), 'enablePrivateClusterPublicFQDN', and(parameters('enablePrivateCluster'), equals(parameters('privateClusterDnsMethod'), 'none')))), 'agentPoolProfiles', if(parameters('JustUseSystemPool'), array(createObject('name', if(parameters('JustUseSystemPool'), parameters('nodePoolName'), 'npsystem'), 'vmSize', parameters('agentVMSize'), 'count', parameters('agentCount'), 'mode', 'System', 'osType', 'Linux', 'maxPods', 30, 'type', 'VirtualMachineScaleSets', 'vnetSubnetID', if(not(empty(if(parameters('custom_vnet'), reference(resourceId('Microsoft.Resources/deployments', take(format('{0}-network', deployment().name), 64)), '2022-09-01').outputs.aksSubnetId.value, parameters('byoAKSSubnetId')))), if(parameters('custom_vnet'), reference(resourceId('Microsoft.Resources/deployments', take(format('{0}-network', deployment().name), 64)), '2022-09-01').outputs.aksSubnetId.value, parameters('byoAKSSubnetId')), null()), 'podSubnetID', if(not(empty(if(parameters('custom_vnet'), reference(resourceId('Microsoft.Resources/deployments', take(format('{0}-network', deployment().name), 64)), '2022-09-01').outputs.aksPodSubnetId.value, parameters('byoAKSPodSubnetId')))), if(parameters('custom_vnet'), reference(resourceId('Microsoft.Resources/deployments', take(format('{0}-network', deployment().name), 64)), '2022-09-01').outputs.aksPodSubnetId.value, parameters('byoAKSPodSubnetId')), null()), 'upgradeSettings', createObject('maxSurge', '33%'), 'nodeTaints', createArray(if(parameters('JustUseSystemPool'), '', 'CriticalAddonsOnly=true:NoSchedule')))), concat(array(union(createObject('name', if(parameters('JustUseSystemPool'), parameters('nodePoolName'), 'npsystem'), 'vmSize', parameters('agentVMSize'), 'count', parameters('agentCount'), 'mode', 'System', 'osType', 'Linux', 'maxPods', 30, 'type', 'VirtualMachineScaleSets', 'vnetSubnetID', if(not(empty(if(parameters('custom_vnet'), reference(resourceId('Microsoft.Resources/deployments', take(format('{0}-network', deployment().name), 64)), '2022-09-01').outputs.aksSubnetId.value, parameters('byoAKSSubnetId')))), if(parameters('custom_vnet'), reference(resourceId('Microsoft.Resources/deployments', take(format('{0}-network', deployment().name), 64)), '2022-09-01').outputs.aksSubnetId.value, parameters('byoAKSSubnetId')), null()), 'podSubnetID', if(not(empty(if(parameters('custom_vnet'), reference(resourceId('Microsoft.Resources/deployments', take(format('{0}-network', deployment().name), 64)), '2022-09-01').outputs.aksPodSubnetId.value, parameters('byoAKSPodSubnetId')))), if(parameters('custom_vnet'), reference(resourceId('Microsoft.Resources/deployments', take(format('{0}-network', deployment().name), 64)), '2022-09-01').outputs.aksPodSubnetId.value, parameters('byoAKSPodSubnetId')), null()), 'upgradeSettings', createObject('maxSurge', '33%'), 'nodeTaints', createArray(if(parameters('JustUseSystemPool'), '', 'CriticalAddonsOnly=true:NoSchedule'))), if(and(equals(parameters('SystemPoolType'), 'Custom'), not(equals(parameters('SystemPoolCustomPreset'), createObject()))), parameters('SystemPoolCustomPreset'), variables('systemPoolPresets')[parameters('SystemPoolType')]))))), 'workloadAutoScalerProfile', createObject('keda', createObject('enabled', parameters('kedaAddon'))), 'networkProfile', createObject('loadBalancerSku', 'standard', 'networkPlugin', parameters('networkPlugin'), 'networkPolicy', parameters('networkPolicy'), 'networkPluginMode', if(equals(parameters('networkPlugin'), 'azure'), parameters('networkPluginMode'), ''), 'podCidr', if(or(equals(parameters('networkPlugin'), 'kubenet'), parameters('cniDynamicIpAllocation')), parameters('podCidr'), json('null')), 'serviceCidr', parameters('serviceCidr'), 'dnsServiceIP', parameters('dnsServiceIP'), 'dockerBridgeCidr', parameters('dockerBridgeCidr'), 'outboundType', parameters('aksOutboundTrafficType'), 'ebpfDataplane', if(equals(parameters('networkPlugin'), 'azure'), parameters('ebpfDataplane'), '')), 'disableLocalAccounts', and(parameters('AksDisableLocalAccounts'), parameters('enable_aad')), 'autoUpgradeProfile', createObject('upgradeChannel', parameters('upgradeChannel')), 'addonProfiles', if(not(empty(variables('aks_addons1'))), variables('aks_addons1'), variables('aks_addons')), 'autoScalerProfile', if(variables('autoScale'), parameters('AutoscaleProfile'), createObject()), 'oidcIssuerProfile', createObject('enabled', parameters('oidcIssuer')), 'securityProfile', createObject('workloadIdentity', createObject('enabled', parameters('workloadIdentity'))), 'ingressProfile', createObject('webAppRouting', createObject('enabled', parameters('warIngressNginx'))), 'storageProfile', createObject('blobCSIDriver', createObject('enabled', parameters('blobCSIDriver')), 'diskCSIDriver', createObject('enabled', parameters('diskCSIDriver')), 'fileCSIDriver', createObject('enabled', parameters('fileCSIDriver'))), 'nodeResourceGroupProfile', createObject('restrictionLevel', parameters('restrictionLevelNodeResourceGroup'))), if(equals(parameters('aksOutboundTrafficType'), 'managedNATGateway'), variables('managedNATGatewayProfile'), createObject()), if(and(parameters('defenderForContainers'), variables('createLaw')), variables('azureDefenderSecurityProfile'), createObject()), if(or(variables('keyVaultKmsCreateAndPrereqs'), not(empty(parameters('keyVaultKmsByoKeyId')))), createObject('securityProfile', createObject('azureKeyVaultKms', createObject('enabled', or(variables('keyVaultKmsCreateAndPrereqs'), not(empty(parameters('keyVaultKmsByoKeyId')))), 'keyId', if(variables('keyVaultKmsCreateAndPrereqs'), reference(resourceId('Microsoft.Resources/deployments', take(format('{0}-keyvaultKmsKeys-{1}', deployment().name, parameters('resourceName')), 64)), '2022-09-01').outputs.keyVaultKmsKeyUri.value, if(not(empty(parameters('keyVaultKmsByoKeyId'))), parameters('keyVaultKmsByoKeyId'), '')), 'keyVaultNetworkAccess', if(parameters('privateLinks'), 'private', 'public'), 'keyVaultResourceId', if(and(parameters('privateLinks'), not(empty(parameters('keyVaultKmsByoKeyId')))), extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('keyVaultKmsByoRG')), 'Microsoft.KeyVault/vaults', variables('keyVaultKmsByoName')), '')))), createObject()), if(not(empty(parameters('managedNodeResourceGroup'))), createObject('nodeResourceGroup', parameters('managedNodeResourceGroup')), createObject()))]",
+      "properties": "[union(createObject('kubernetesVersion', parameters('kubernetesVersion'), 'enableRBAC', true(), 'dnsPrefix', parameters('dnsPrefix'), 'aadProfile', if(parameters('enable_aad'), createObject('managed', true(), 'enableAzureRBAC', parameters('enableAzureRBAC'), 'tenantID', parameters('aad_tenant_id')), null()), 'apiServerAccessProfile', if(not(empty(parameters('authorizedIPRanges'))), createObject('authorizedIPRanges', if(parameters('createNatGateway'), concat(parameters('authorizedIPRanges'), reference(resourceId('Microsoft.Resources/deployments', take(format('{0}-network', deployment().name), 64)), '2022-09-01').outputs.natGwIpArr.value), parameters('authorizedIPRanges'))), createObject('enablePrivateCluster', parameters('enablePrivateCluster'), 'privateDNSZone', if(parameters('enablePrivateCluster'), variables('aksPrivateDnsZone'), ''), 'enablePrivateClusterPublicFQDN', and(parameters('enablePrivateCluster'), equals(parameters('privateClusterDnsMethod'), 'none')))), 'agentPoolProfiles', if(parameters('JustUseSystemPool'), array(createObject('name', if(parameters('JustUseSystemPool'), parameters('nodePoolName'), 'npsystem'), 'vmSize', parameters('agentVMSize'), 'count', parameters('agentCount'), 'mode', 'System', 'osType', 'Linux', 'osSku', if(equals(parameters('osSKU'), 'AzureLinux'), parameters('osSKU'), 'Ubuntu'), 'maxPods', 30, 'type', 'VirtualMachineScaleSets', 'vnetSubnetID', if(not(empty(if(parameters('custom_vnet'), reference(resourceId('Microsoft.Resources/deployments', take(format('{0}-network', deployment().name), 64)), '2022-09-01').outputs.aksSubnetId.value, parameters('byoAKSSubnetId')))), if(parameters('custom_vnet'), reference(resourceId('Microsoft.Resources/deployments', take(format('{0}-network', deployment().name), 64)), '2022-09-01').outputs.aksSubnetId.value, parameters('byoAKSSubnetId')), null()), 'podSubnetID', if(not(empty(if(parameters('custom_vnet'), reference(resourceId('Microsoft.Resources/deployments', take(format('{0}-network', deployment().name), 64)), '2022-09-01').outputs.aksPodSubnetId.value, parameters('byoAKSPodSubnetId')))), if(parameters('custom_vnet'), reference(resourceId('Microsoft.Resources/deployments', take(format('{0}-network', deployment().name), 64)), '2022-09-01').outputs.aksPodSubnetId.value, parameters('byoAKSPodSubnetId')), null()), 'upgradeSettings', createObject('maxSurge', '33%'), 'nodeTaints', createArray(if(parameters('JustUseSystemPool'), '', 'CriticalAddonsOnly=true:NoSchedule')))), concat(array(union(createObject('name', if(parameters('JustUseSystemPool'), parameters('nodePoolName'), 'npsystem'), 'vmSize', parameters('agentVMSize'), 'count', parameters('agentCount'), 'mode', 'System', 'osType', 'Linux', 'osSku', if(equals(parameters('osSKU'), 'AzureLinux'), parameters('osSKU'), 'Ubuntu'), 'maxPods', 30, 'type', 'VirtualMachineScaleSets', 'vnetSubnetID', if(not(empty(if(parameters('custom_vnet'), reference(resourceId('Microsoft.Resources/deployments', take(format('{0}-network', deployment().name), 64)), '2022-09-01').outputs.aksSubnetId.value, parameters('byoAKSSubnetId')))), if(parameters('custom_vnet'), reference(resourceId('Microsoft.Resources/deployments', take(format('{0}-network', deployment().name), 64)), '2022-09-01').outputs.aksSubnetId.value, parameters('byoAKSSubnetId')), null()), 'podSubnetID', if(not(empty(if(parameters('custom_vnet'), reference(resourceId('Microsoft.Resources/deployments', take(format('{0}-network', deployment().name), 64)), '2022-09-01').outputs.aksPodSubnetId.value, parameters('byoAKSPodSubnetId')))), if(parameters('custom_vnet'), reference(resourceId('Microsoft.Resources/deployments', take(format('{0}-network', deployment().name), 64)), '2022-09-01').outputs.aksPodSubnetId.value, parameters('byoAKSPodSubnetId')), null()), 'upgradeSettings', createObject('maxSurge', '33%'), 'nodeTaints', createArray(if(parameters('JustUseSystemPool'), '', 'CriticalAddonsOnly=true:NoSchedule'))), if(and(equals(parameters('SystemPoolType'), 'Custom'), not(equals(parameters('SystemPoolCustomPreset'), createObject()))), parameters('SystemPoolCustomPreset'), variables('systemPoolPresets')[parameters('SystemPoolType')]))))), 'workloadAutoScalerProfile', createObject('keda', createObject('enabled', parameters('kedaAddon'))), 'networkProfile', createObject('loadBalancerSku', 'standard', 'networkPlugin', parameters('networkPlugin'), 'networkPolicy', parameters('networkPolicy'), 'networkPluginMode', if(equals(parameters('networkPlugin'), 'azure'), parameters('networkPluginMode'), ''), 'podCidr', if(or(or(equals(parameters('networkPlugin'), 'kubenet'), equals(parameters('networkPluginMode'), 'Overlay')), parameters('cniDynamicIpAllocation')), parameters('podCidr'), json('null')), 'serviceCidr', parameters('serviceCidr'), 'dnsServiceIP', parameters('dnsServiceIP'), 'outboundType', variables('outboundTrafficType'), 'networkDataplane', if(equals(parameters('networkPlugin'), 'azure'), parameters('networkDataplane'), '')), 'disableLocalAccounts', and(parameters('AksDisableLocalAccounts'), parameters('enable_aad')), 'autoUpgradeProfile', createObject('upgradeChannel', parameters('upgradeChannel')), 'addonProfiles', if(not(empty(variables('aks_addons1'))), variables('aks_addons1'), variables('aks_addons')), 'autoScalerProfile', if(variables('autoScale'), parameters('AutoscaleProfile'), createObject()), 'oidcIssuerProfile', createObject('enabled', parameters('oidcIssuer')), 'securityProfile', createObject('workloadIdentity', createObject('enabled', parameters('workloadIdentity'))), 'ingressProfile', createObject('webAppRouting', createObject('enabled', parameters('warIngressNginx'))), 'storageProfile', createObject('blobCSIDriver', createObject('enabled', parameters('blobCSIDriver')), 'diskCSIDriver', createObject('enabled', parameters('diskCSIDriver')), 'fileCSIDriver', createObject('enabled', parameters('fileCSIDriver')))), if(equals(variables('outboundTrafficType'), 'managedNATGateway'), variables('managedNATGatewayProfile'), createObject()), if(and(parameters('defenderForContainers'), variables('createLaw')), variables('azureDefenderSecurityProfile'), createObject()), if(or(variables('keyVaultKmsCreateAndPrereqs'), not(empty(parameters('keyVaultKmsByoKeyId')))), createObject('securityProfile', createObject('azureKeyVaultKms', createObject('enabled', or(variables('keyVaultKmsCreateAndPrereqs'), not(empty(parameters('keyVaultKmsByoKeyId')))), 'keyId', if(variables('keyVaultKmsCreateAndPrereqs'), reference(resourceId('Microsoft.Resources/deployments', take(format('{0}-keyvaultKmsKeys-{1}', deployment().name, parameters('resourceName')), 64)), '2022-09-01').outputs.keyVaultKmsKeyUri.value, if(not(empty(parameters('keyVaultKmsByoKeyId'))), parameters('keyVaultKmsByoKeyId'), '')), 'keyVaultNetworkAccess', if(parameters('privateLinks'), 'private', 'public'), 'keyVaultResourceId', if(and(parameters('privateLinks'), not(empty(parameters('keyVaultKmsByoKeyId')))), extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('keyVaultKmsByoRG')), 'Microsoft.KeyVault/vaults', variables('keyVaultKmsByoName')), '')))), createObject()), if(not(empty(parameters('managedNodeResourceGroup'))), createObject('nodeResourceGroup', parameters('managedNodeResourceGroup')), createObject()), if(not(empty(parameters('serviceMeshProfile'))), createObject('serviceMeshProfile', variables('serviceMeshProfileObj')), createObject()))]",
       "identity": "[if(variables('createAksUai'), createObject('type', 'UserAssigned', 'userAssignedIdentities', createObject(format('{0}', resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('id-aks-{0}', parameters('resourceName')))), createObject())), if(not(empty(parameters('byoUaiName'))), createObject('type', 'UserAssigned', 'userAssignedIdentities', createObject(format('{0}', resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('byoUaiName'))), createObject())), createObject('type', 'SystemAssigned')))]",
       "sku": {
         "name": "Base",
@@ -1562,7 +1637,7 @@
       "name": "[guid(resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('resourceName'))), 'omsagent', variables('MonitoringMetricsPublisherRole'))]",
       "properties": {
         "roleDefinitionId": "[variables('MonitoringMetricsPublisherRole')]",
-        "principalId": "[reference(resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('resourceName'))), '2023-03-02-preview').addonProfiles.omsagent.identity.objectId]",
+        "principalId": "[reference(resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('resourceName'))), '2024-01-01').addonProfiles.omsagent.identity.objectId]",
         "principalType": "ServicePrincipal"
       },
       "dependsOn": [
@@ -1572,7 +1647,7 @@
     {
       "condition": "[parameters('createEventGrid')]",
       "type": "Microsoft.EventGrid/systemTopics",
-      "apiVersion": "2021-12-01",
+      "apiVersion": "2023-06-01-preview",
       "name": "[format('evgt-{0}', format('aks-{0}', parameters('resourceName')))]",
       "location": "[parameters('location')]",
       "identity": {
@@ -1615,7 +1690,7 @@
     {
       "condition": "[parameters('enableTelemetry')]",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2022-09-01",
+      "apiVersion": "2023-07-01",
       "name": "[variables('telemetryId')]",
       "properties": {
         "mode": "Incremental",
@@ -1655,8 +1730,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "158469593277879929"
+              "version": "0.26.54.24096",
+              "templateHash": "9140043254340848035"
             }
           },
           "parameters": {
@@ -1827,8 +1902,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "3834904454132541691"
+              "version": "0.26.54.24096",
+              "templateHash": "4012224702172118079"
             }
           },
           "parameters": {
@@ -1984,6 +2059,7 @@
                 "addressPrefix": "[parameters('bastionSubnetAddressPrefix')]"
               }
             },
+            "NatAvailabilityZone": "[array(first(parameters('availabilityZones')))]",
             "acrpool_subnet_name": "acrpool-sn",
             "acrpool_baseSubnet": {
               "name": "[variables('acrpool_subnet_name')]",
@@ -2046,7 +2122,7 @@
             {
               "condition": "[parameters('azureFirewalls')]",
               "type": "Microsoft.Network/routeTables",
-              "apiVersion": "2022-07-01",
+              "apiVersion": "2023-04-01",
               "name": "[variables('routeFwTableName')]",
               "location": "[parameters('location')]",
               "properties": {
@@ -2085,7 +2161,7 @@
             },
             {
               "type": "Microsoft.Network/virtualNetworks",
-              "apiVersion": "2022-07-01",
+              "apiVersion": "2023-04-01",
               "name": "[variables('vnetName')]",
               "location": "[parameters('location')]",
               "properties": {
@@ -2109,7 +2185,7 @@
             {
               "condition": "[not(empty(parameters('privateLinkAcrId')))]",
               "type": "Microsoft.Network/privateEndpoints",
-              "apiVersion": "2021-08-01",
+              "apiVersion": "2023-04-01",
               "name": "[variables('privateLinkAcrName')]",
               "location": "[parameters('location')]",
               "properties": {
@@ -2136,14 +2212,14 @@
             {
               "condition": "[not(empty(parameters('privateLinkAcrId')))]",
               "type": "Microsoft.Network/privateDnsZones",
-              "apiVersion": "2020-06-01",
+              "apiVersion": "2020-09-01",
               "name": "privatelink.azurecr.io",
               "location": "global"
             },
             {
               "condition": "[not(empty(parameters('privateLinkAcrId')))]",
               "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
-              "apiVersion": "2020-06-01",
+              "apiVersion": "2020-09-01",
               "name": "[format('{0}/{1}', 'privatelink.azurecr.io', variables('privateDnsAcrLinkName'))]",
               "location": "global",
               "properties": {
@@ -2160,7 +2236,7 @@
             {
               "condition": "[not(empty(parameters('privateLinkAcrId')))]",
               "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
-              "apiVersion": "2021-08-01",
+              "apiVersion": "2023-04-01",
               "name": "[format('{0}/{1}', variables('privateLinkAcrName'), 'default')]",
               "properties": {
                 "privateDnsZoneConfigs": [
@@ -2180,7 +2256,7 @@
             {
               "condition": "[not(empty(parameters('privateLinkAkvId')))]",
               "type": "Microsoft.Network/privateEndpoints",
-              "apiVersion": "2021-08-01",
+              "apiVersion": "2023-04-01",
               "name": "[variables('privateLinkAkvName')]",
               "location": "[parameters('location')]",
               "properties": {
@@ -2207,14 +2283,14 @@
             {
               "condition": "[not(empty(parameters('privateLinkAkvId')))]",
               "type": "Microsoft.Network/privateDnsZones",
-              "apiVersion": "2020-06-01",
+              "apiVersion": "2020-09-01",
               "name": "privatelink.vaultcore.azure.net",
               "location": "global"
             },
             {
               "condition": "[not(empty(parameters('privateLinkAkvId')))]",
               "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
-              "apiVersion": "2020-06-01",
+              "apiVersion": "2020-09-01",
               "name": "[format('{0}/{1}', 'privatelink.vaultcore.azure.net', variables('privateDnsAkvLinkName'))]",
               "location": "global",
               "properties": {
@@ -2231,7 +2307,7 @@
             {
               "condition": "[not(empty(parameters('privateLinkAkvId')))]",
               "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
-              "apiVersion": "2021-08-01",
+              "apiVersion": "2023-04-01",
               "name": "[format('{0}/{1}', variables('privateLinkAkvName'), 'default')]",
               "properties": {
                 "privateDnsZoneConfigs": [
@@ -2251,7 +2327,7 @@
             {
               "condition": "[parameters('bastion')]",
               "type": "Microsoft.Network/publicIPAddresses",
-              "apiVersion": "2022-07-01",
+              "apiVersion": "2023-04-01",
               "name": "[variables('publicIpAddressName')]",
               "location": "[parameters('location')]",
               "sku": {
@@ -2265,7 +2341,7 @@
             {
               "condition": "[parameters('bastion')]",
               "type": "Microsoft.Network/bastionHosts",
-              "apiVersion": "2022-11-01",
+              "apiVersion": "2023-04-01",
               "name": "[parameters('bastionHostName')]",
               "location": "[parameters('location')]",
               "sku": {
@@ -2295,7 +2371,7 @@
             {
               "condition": "[and(parameters('CreateNsgFlowLogs'), parameters('networkSecurityGroups'))]",
               "type": "Microsoft.Storage/storageAccounts",
-              "apiVersion": "2021-08-01",
+              "apiVersion": "2023-01-01",
               "name": "[variables('flowLogStorageName')]",
               "kind": "StorageV2",
               "sku": {
@@ -2313,13 +2389,13 @@
               },
               "condition": "[parameters('natGateway')]",
               "type": "Microsoft.Network/publicIPAddresses",
-              "apiVersion": "2021-08-01",
+              "apiVersion": "2023-04-01",
               "name": "[format('pip-{0}-{1}', variables('natGwName'), add(range(0, parameters('natGatewayPublicIps'))[copyIndex()], 1))]",
               "location": "[parameters('location')]",
               "sku": {
                 "name": "Standard"
               },
-              "zones": "[if(not(empty(parameters('availabilityZones'))), parameters('availabilityZones'), createArray())]",
+              "zones": "[if(not(empty(parameters('availabilityZones'))), variables('NatAvailabilityZone'), createArray())]",
               "properties": {
                 "publicIPAllocationMethod": "Static"
               }
@@ -2327,13 +2403,13 @@
             {
               "condition": "[parameters('natGateway')]",
               "type": "Microsoft.Network/natGateways",
-              "apiVersion": "2021-08-01",
+              "apiVersion": "2023-04-01",
               "name": "[variables('natGwName')]",
               "location": "[parameters('location')]",
               "sku": {
                 "name": "Standard"
               },
-              "zones": "[if(not(empty(parameters('availabilityZones'))), parameters('availabilityZones'), createArray())]",
+              "zones": "[if(not(empty(parameters('availabilityZones'))), variables('NatAvailabilityZone'), createArray())]",
               "properties": {
                 "copy": [
                   {
@@ -2371,8 +2447,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "15511718763070451701"
+                      "version": "0.26.54.24096",
+                      "templateHash": "3417997589173941883"
                     }
                   },
                   "parameters": {
@@ -2424,8 +2500,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "6649525784723845324"
+                      "version": "0.26.54.24096",
+                      "templateHash": "12620517793230757132"
                     }
                   },
                   "parameters": {
@@ -2478,8 +2554,8 @@
                   "resourceName": {
                     "value": "[format('{0}-{1}', variables('aks_subnet_name'), parameters('resourceName'))]"
                   },
-                  "workspaceId": "[if(not(empty(parameters('workspaceName'))), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('workspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('workspaceName')), '2021-06-01').customerId), createObject('value', ''))]",
-                  "workspaceRegion": "[if(not(empty(parameters('workspaceName'))), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('workspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('workspaceName')), '2021-06-01', 'full').location), createObject('value', ''))]",
+                  "workspaceId": "[if(not(empty(parameters('workspaceName'))), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('workspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('workspaceName')), '2022-10-01').customerId), createObject('value', ''))]",
+                  "workspaceRegion": "[if(not(empty(parameters('workspaceName'))), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('workspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('workspaceName')), '2022-10-01', 'full').location), createObject('value', ''))]",
                   "workspaceResourceId": "[if(not(empty(parameters('workspaceName'))), createObject('value', extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('workspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('workspaceName'))), createObject('value', ''))]",
                   "ruleInAllowInternetHttp": {
                     "value": true
@@ -2498,8 +2574,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "14699866650360515799"
+                      "version": "0.26.54.24096",
+                      "templateHash": "9289837448845361250"
                     }
                   },
                   "parameters": {
@@ -2580,7 +2656,7 @@
                   "resources": [
                     {
                       "type": "Microsoft.Network/networkSecurityGroups",
-                      "apiVersion": "2022-11-01",
+                      "apiVersion": "2023-04-01",
                       "name": "[variables('nsgName')]",
                       "location": "[parameters('location')]"
                     },
@@ -2911,8 +2987,8 @@
                           "metadata": {
                             "_generator": {
                               "name": "bicep",
-                              "version": "0.17.1.54307",
-                              "templateHash": "11967796486575428489"
+                              "version": "0.26.54.24096",
+                              "templateHash": "779199993846024352"
                             }
                           },
                           "parameters": {
@@ -2958,7 +3034,7 @@
                           "resources": [
                             {
                               "type": "Microsoft.Network/networkWatchers",
-                              "apiVersion": "2022-01-01",
+                              "apiVersion": "2023-04-01",
                               "name": "[format('NetworkWatcher_{0}', parameters('location'))]",
                               "location": "[parameters('location')]",
                               "properties": {}
@@ -3041,8 +3117,8 @@
                   "resourceName": {
                     "value": "[format('{0}-{1}', variables('acrpool_subnet_name'), parameters('resourceName'))]"
                   },
-                  "workspaceId": "[if(not(empty(parameters('workspaceName'))), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('workspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('workspaceName')), '2021-06-01').customerId), createObject('value', ''))]",
-                  "workspaceRegion": "[if(not(empty(parameters('workspaceName'))), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('workspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('workspaceName')), '2021-06-01', 'full').location), createObject('value', ''))]",
+                  "workspaceId": "[if(not(empty(parameters('workspaceName'))), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('workspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('workspaceName')), '2022-10-01').customerId), createObject('value', ''))]",
+                  "workspaceRegion": "[if(not(empty(parameters('workspaceName'))), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('workspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('workspaceName')), '2022-10-01', 'full').location), createObject('value', ''))]",
                   "workspaceResourceId": "[if(not(empty(parameters('workspaceName'))), createObject('value', extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('workspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('workspaceName'))), createObject('value', ''))]",
                   "FlowLogStorageAccountId": "[if(parameters('CreateNsgFlowLogs'), createObject('value', resourceId('Microsoft.Storage/storageAccounts', variables('flowLogStorageName'))), createObject('value', ''))]"
                 },
@@ -3052,8 +3128,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "14699866650360515799"
+                      "version": "0.26.54.24096",
+                      "templateHash": "9289837448845361250"
                     }
                   },
                   "parameters": {
@@ -3134,7 +3210,7 @@
                   "resources": [
                     {
                       "type": "Microsoft.Network/networkSecurityGroups",
-                      "apiVersion": "2022-11-01",
+                      "apiVersion": "2023-04-01",
                       "name": "[variables('nsgName')]",
                       "location": "[parameters('location')]"
                     },
@@ -3465,8 +3541,8 @@
                           "metadata": {
                             "_generator": {
                               "name": "bicep",
-                              "version": "0.17.1.54307",
-                              "templateHash": "11967796486575428489"
+                              "version": "0.26.54.24096",
+                              "templateHash": "779199993846024352"
                             }
                           },
                           "parameters": {
@@ -3512,7 +3588,7 @@
                           "resources": [
                             {
                               "type": "Microsoft.Network/networkWatchers",
-                              "apiVersion": "2022-01-01",
+                              "apiVersion": "2023-04-01",
                               "name": "[format('NetworkWatcher_{0}', parameters('location'))]",
                               "location": "[parameters('location')]",
                               "properties": {}
@@ -3596,8 +3672,8 @@
                   "resourceName": {
                     "value": "[format('{0}-{1}', variables('appgw_subnet_name'), parameters('resourceName'))]"
                   },
-                  "workspaceId": "[if(not(empty(parameters('workspaceName'))), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('workspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('workspaceName')), '2021-06-01').customerId), createObject('value', ''))]",
-                  "workspaceRegion": "[if(not(empty(parameters('workspaceName'))), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('workspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('workspaceName')), '2021-06-01', 'full').location), createObject('value', ''))]",
+                  "workspaceId": "[if(not(empty(parameters('workspaceName'))), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('workspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('workspaceName')), '2022-10-01').customerId), createObject('value', ''))]",
+                  "workspaceRegion": "[if(not(empty(parameters('workspaceName'))), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('workspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('workspaceName')), '2022-10-01', 'full').location), createObject('value', ''))]",
                   "workspaceResourceId": "[if(not(empty(parameters('workspaceName'))), createObject('value', extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('workspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('workspaceName'))), createObject('value', ''))]",
                   "ruleInAllowInternetHttp": {
                     "value": "[parameters('ingressApplicationGatewayPublic')]"
@@ -3625,8 +3701,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "14699866650360515799"
+                      "version": "0.26.54.24096",
+                      "templateHash": "9289837448845361250"
                     }
                   },
                   "parameters": {
@@ -3707,7 +3783,7 @@
                   "resources": [
                     {
                       "type": "Microsoft.Network/networkSecurityGroups",
-                      "apiVersion": "2022-11-01",
+                      "apiVersion": "2023-04-01",
                       "name": "[variables('nsgName')]",
                       "location": "[parameters('location')]"
                     },
@@ -4038,8 +4114,8 @@
                           "metadata": {
                             "_generator": {
                               "name": "bicep",
-                              "version": "0.17.1.54307",
-                              "templateHash": "11967796486575428489"
+                              "version": "0.26.54.24096",
+                              "templateHash": "779199993846024352"
                             }
                           },
                           "parameters": {
@@ -4085,7 +4161,7 @@
                           "resources": [
                             {
                               "type": "Microsoft.Network/networkWatchers",
-                              "apiVersion": "2022-01-01",
+                              "apiVersion": "2023-04-01",
                               "name": "[format('NetworkWatcher_{0}', parameters('location'))]",
                               "location": "[parameters('location')]",
                               "properties": {}
@@ -4169,8 +4245,8 @@
                   "resourceName": {
                     "value": "[format('{0}-{1}', variables('bastion_subnet_name'), parameters('resourceName'))]"
                   },
-                  "workspaceId": "[if(not(empty(parameters('workspaceName'))), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('workspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('workspaceName')), '2021-06-01').customerId), createObject('value', ''))]",
-                  "workspaceRegion": "[if(not(empty(parameters('workspaceName'))), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('workspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('workspaceName')), '2021-06-01', 'full').location), createObject('value', ''))]",
+                  "workspaceId": "[if(not(empty(parameters('workspaceName'))), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('workspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('workspaceName')), '2022-10-01').customerId), createObject('value', ''))]",
+                  "workspaceRegion": "[if(not(empty(parameters('workspaceName'))), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('workspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('workspaceName')), '2022-10-01', 'full').location), createObject('value', ''))]",
                   "workspaceResourceId": "[if(not(empty(parameters('workspaceName'))), createObject('value', extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('workspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('workspaceName'))), createObject('value', ''))]",
                   "ruleInAllowBastionHostComms": {
                     "value": true
@@ -4198,8 +4274,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "14699866650360515799"
+                      "version": "0.26.54.24096",
+                      "templateHash": "9289837448845361250"
                     }
                   },
                   "parameters": {
@@ -4280,7 +4356,7 @@
                   "resources": [
                     {
                       "type": "Microsoft.Network/networkSecurityGroups",
-                      "apiVersion": "2022-11-01",
+                      "apiVersion": "2023-04-01",
                       "name": "[variables('nsgName')]",
                       "location": "[parameters('location')]"
                     },
@@ -4611,8 +4687,8 @@
                           "metadata": {
                             "_generator": {
                               "name": "bicep",
-                              "version": "0.17.1.54307",
-                              "templateHash": "11967796486575428489"
+                              "version": "0.26.54.24096",
+                              "templateHash": "779199993846024352"
                             }
                           },
                           "parameters": {
@@ -4658,7 +4734,7 @@
                           "resources": [
                             {
                               "type": "Microsoft.Network/networkWatchers",
-                              "apiVersion": "2022-01-01",
+                              "apiVersion": "2023-04-01",
                               "name": "[format('NetworkWatcher_{0}', parameters('location'))]",
                               "location": "[parameters('location')]",
                               "properties": {}
@@ -4742,8 +4818,8 @@
                   "resourceName": {
                     "value": "[format('{0}-{1}', variables('private_link_subnet_name'), parameters('resourceName'))]"
                   },
-                  "workspaceId": "[if(not(empty(parameters('workspaceName'))), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('workspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('workspaceName')), '2021-06-01').customerId), createObject('value', ''))]",
-                  "workspaceRegion": "[if(not(empty(parameters('workspaceName'))), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('workspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('workspaceName')), '2021-06-01', 'full').location), createObject('value', ''))]",
+                  "workspaceId": "[if(not(empty(parameters('workspaceName'))), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('workspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('workspaceName')), '2022-10-01').customerId), createObject('value', ''))]",
+                  "workspaceRegion": "[if(not(empty(parameters('workspaceName'))), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('workspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('workspaceName')), '2022-10-01', 'full').location), createObject('value', ''))]",
                   "workspaceResourceId": "[if(not(empty(parameters('workspaceName'))), createObject('value', extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('workspaceResourceGroupName')), 'Microsoft.OperationalInsights/workspaces', parameters('workspaceName'))), createObject('value', ''))]",
                   "FlowLogStorageAccountId": "[if(parameters('CreateNsgFlowLogs'), createObject('value', resourceId('Microsoft.Storage/storageAccounts', variables('flowLogStorageName'))), createObject('value', ''))]"
                 },
@@ -4753,8 +4829,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "14699866650360515799"
+                      "version": "0.26.54.24096",
+                      "templateHash": "9289837448845361250"
                     }
                   },
                   "parameters": {
@@ -4835,7 +4911,7 @@
                   "resources": [
                     {
                       "type": "Microsoft.Network/networkSecurityGroups",
-                      "apiVersion": "2022-11-01",
+                      "apiVersion": "2023-04-01",
                       "name": "[variables('nsgName')]",
                       "location": "[parameters('location')]"
                     },
@@ -5166,8 +5242,8 @@
                           "metadata": {
                             "_generator": {
                               "name": "bicep",
-                              "version": "0.17.1.54307",
-                              "templateHash": "11967796486575428489"
+                              "version": "0.26.54.24096",
+                              "templateHash": "779199993846024352"
                             }
                           },
                           "parameters": {
@@ -5213,7 +5289,7 @@
                           "resources": [
                             {
                               "type": "Microsoft.Network/networkWatchers",
-                              "apiVersion": "2022-01-01",
+                              "apiVersion": "2023-04-01",
                               "name": "[format('NetworkWatcher_{0}', parameters('location'))]",
                               "location": "[parameters('location')]",
                               "properties": {}
@@ -5321,6 +5397,13 @@
             "privateLinkSubnetId": {
               "type": "string",
               "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), variables('private_link_subnet_name'))]"
+            },
+            "natGwIpArr": {
+              "type": "array",
+              "copy": {
+                "count": "[length(range(0, parameters('natGatewayPublicIps')))]",
+                "input": "[if(parameters('natGateway'), reference(resourceId('Microsoft.Network/publicIPAddresses', format('pip-{0}-{1}', variables('natGwName'), add(range(0, parameters('natGatewayPublicIps'))[range(0, parameters('natGatewayPublicIps'))[copyIndex()]], 1))), '2023-04-01').ipAddress, null())]"
+              }
             }
           }
         }
@@ -5348,7 +5431,7 @@
           },
           "vnetId": "[if(variables('isDnsZonePrivate'), if(not(empty(parameters('byoAKSSubnetId'))), createObject('value', split(parameters('byoAKSSubnetId'), '/subnets')[0]), if(parameters('custom_vnet'), createObject('value', reference(resourceId('Microsoft.Resources/deployments', take(format('{0}-network', deployment().name), 64)), '2022-09-01').outputs.vnetId.value), createObject('value', ''))), createObject('value', ''))]",
           "principalId": {
-            "value": "[reference(resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('resourceName'))), '2023-03-02-preview').identityProfile.kubeletidentity.objectId]"
+            "value": "[reference(resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('resourceName'))), '2024-01-01').identityProfile.kubeletidentity.objectId]"
           }
         },
         "template": {
@@ -5357,8 +5440,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "8151093183633396780"
+              "version": "0.26.54.24096",
+              "templateHash": "11633340609312379920"
             }
           },
           "parameters": {
@@ -5382,9 +5465,11 @@
             }
           },
           "variables": {
-            "dnsZoneRg": "[if(not(empty(parameters('dnsZoneId'))), split(parameters('dnsZoneId'), '/')[4], '')]",
-            "dnsZoneName": "[if(not(empty(parameters('dnsZoneId'))), split(parameters('dnsZoneId'), '/')[8], '')]",
-            "isDnsZonePrivate": "[if(not(empty(parameters('dnsZoneId'))), equals(split(parameters('dnsZoneId'), '/')[7], 'privateDnsZones'), false())]"
+            "dnsZoneIdSegments": "[split(parameters('dnsZoneId'), '/')]",
+            "dnsZoneSubscriptionId": "[if(not(empty(parameters('dnsZoneId'))), variables('dnsZoneIdSegments')[2], '')]",
+            "dnsZoneRg": "[if(not(empty(parameters('dnsZoneId'))), variables('dnsZoneIdSegments')[4], '')]",
+            "dnsZoneName": "[if(not(empty(parameters('dnsZoneId'))), variables('dnsZoneIdSegments')[8], '')]",
+            "isDnsZonePrivate": "[if(not(empty(parameters('dnsZoneId'))), equals(variables('dnsZoneIdSegments')[7], 'privateDnsZones'), false())]"
           },
           "resources": [
             {
@@ -5392,6 +5477,7 @@
               "type": "Microsoft.Resources/deployments",
               "apiVersion": "2022-09-01",
               "name": "[take(format('{0}-dns-{1}', deployment().name, variables('dnsZoneName')), 64)]",
+              "subscriptionId": "[variables('dnsZoneSubscriptionId')]",
               "resourceGroup": "[variables('dnsZoneRg')]",
               "properties": {
                 "expressionEvaluationOptions": {
@@ -5418,8 +5504,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "13108853651140059384"
+                      "version": "0.26.54.24096",
+                      "templateHash": "4736783265358516487"
                     }
                   },
                   "parameters": {
@@ -5469,7 +5555,7 @@
                     {
                       "condition": "[and(parameters('isPrivate'), not(empty(parameters('vnetId'))))]",
                       "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
-                      "apiVersion": "2020-06-01",
+                      "apiVersion": "2020-09-01",
                       "name": "[format('{0}/{1}', parameters('dnsZoneName'), 'privatedns')]",
                       "tags": {},
                       "location": "global",
@@ -5528,26 +5614,26 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "6315177618859229733"
+              "version": "0.26.54.24096",
+              "templateHash": "2160890359984794954"
             }
           },
           "parameters": {
             "location": {
               "type": "string",
               "defaultValue": "[resourceGroup().location]",
+              "minLength": 2,
               "metadata": {
                 "description": "The location to use for the deployment. defaults to Resource Groups location."
-              },
-              "minLength": 2
+              }
             },
             "resourceName": {
               "type": "string",
+              "minLength": 3,
+              "maxLength": 20,
               "metadata": {
                 "description": "Used to name all resources"
-              },
-              "maxLength": 20,
-              "minLength": 3
+              }
             },
             "privateLinks": {
               "type": "bool",
@@ -5671,7 +5757,7 @@
         "parameters": {
           "keyVaultName": "[if(parameters('keyVaultCreate'), createObject('value', reference(resourceId('Microsoft.Resources/deployments', take(format('{0}-keyvaultApps', deployment().name), 64)), '2022-09-01').outputs.keyVaultName.value), createObject('value', ''))]",
           "rbacSecretUserSps": {
-            "value": "[union(createArray(if(and(variables('deployAppGw'), parameters('appgwKVIntegration')), reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('id-appgw-{0}', parameters('resourceName'))), '2023-01-31').principalId, '')), createArray(if(parameters('keyVaultAksCSI'), reference(resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('resourceName'))), '2023-03-02-preview').addonProfiles.azureKeyvaultSecretsProvider.identity.objectId, '')))]"
+            "value": "[union(createArray(if(and(variables('deployAppGw'), parameters('appgwKVIntegration')), reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('id-appgw-{0}', parameters('resourceName'))), '2023-01-31').principalId, '')), createArray(if(parameters('keyVaultAksCSI'), reference(resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('resourceName'))), '2024-01-01').addonProfiles.azureKeyvaultSecretsProvider.identity.objectId, '')))]"
           },
           "rbacSecretOfficerSps": "[if(and(not(empty(parameters('keyVaultOfficerRolePrincipalId'))), parameters('automatedDeployment')), createObject('value', variables('keyVaultOfficerRolePrincipalIds')), createObject('value', createArray()))]",
           "rbacCertOfficerSps": "[if(and(not(empty(parameters('keyVaultOfficerRolePrincipalId'))), parameters('automatedDeployment')), createObject('value', variables('keyVaultOfficerRolePrincipalIds')), createObject('value', createArray()))]",
@@ -5684,8 +5770,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "14659011351481980239"
+              "version": "0.26.54.24096",
+              "templateHash": "6858223693548064687"
             }
           },
           "parameters": {
@@ -6025,26 +6111,26 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "6315177618859229733"
+              "version": "0.26.54.24096",
+              "templateHash": "2160890359984794954"
             }
           },
           "parameters": {
             "location": {
               "type": "string",
               "defaultValue": "[resourceGroup().location]",
+              "minLength": 2,
               "metadata": {
                 "description": "The location to use for the deployment. defaults to Resource Groups location."
-              },
-              "minLength": 2
+              }
             },
             "resourceName": {
               "type": "string",
+              "minLength": 3,
+              "maxLength": 20,
               "metadata": {
                 "description": "Used to name all resources"
-              },
-              "maxLength": 20,
-              "minLength": 3
+              }
             },
             "privateLinks": {
               "type": "bool",
@@ -6189,8 +6275,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "14659011351481980239"
+              "version": "0.26.54.24096",
+              "templateHash": "6858223693548064687"
             }
           },
           "parameters": {
@@ -6525,8 +6611,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "14659011351481980239"
+              "version": "0.26.54.24096",
+              "templateHash": "6858223693548064687"
             }
           },
           "parameters": {
@@ -6922,8 +7008,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "16015599909866786081"
+              "version": "0.26.54.24096",
+              "templateHash": "15227843879918428187"
             }
           },
           "parameters": {
@@ -6991,8 +7077,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "16460481184151742935"
+              "version": "0.26.54.24096",
+              "templateHash": "8355596698622263077"
             }
           },
           "parameters": {
@@ -7287,8 +7373,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "175829362023337371"
+              "version": "0.26.54.24096",
+              "templateHash": "6234959930905017757"
             }
           },
           "parameters": {
@@ -7359,7 +7445,7 @@
           "resources": [
             {
               "type": "Microsoft.Network/publicIPAddresses",
-              "apiVersion": "2022-07-01",
+              "apiVersion": "2023-04-01",
               "name": "[variables('firewallPublicIpName')]",
               "location": "[parameters('location')]",
               "sku": {
@@ -7374,7 +7460,7 @@
             {
               "condition": "[equals(parameters('fwSku'), 'Basic')]",
               "type": "Microsoft.Network/publicIPAddresses",
-              "apiVersion": "2022-07-01",
+              "apiVersion": "2023-04-01",
               "name": "[variables('firewallManagementPublicIpName')]",
               "location": "[parameters('location')]",
               "sku": {
@@ -7429,7 +7515,7 @@
             },
             {
               "type": "Microsoft.Network/azureFirewalls",
-              "apiVersion": "2022-01-01",
+              "apiVersion": "2023-04-01",
               "name": "[variables('fw_name')]",
               "location": "[parameters('location')]",
               "zones": "[if(not(empty(parameters('availabilityZones'))), parameters('availabilityZones'), createArray())]",
@@ -7466,7 +7552,7 @@
             },
             {
               "type": "Microsoft.Network/firewallPolicies",
-              "apiVersion": "2022-01-01",
+              "apiVersion": "2023-04-01",
               "name": "[format('afwp-{0}', parameters('resourceName'))]",
               "location": "[parameters('location')]",
               "properties": {
@@ -7482,7 +7568,7 @@
             },
             {
               "type": "Microsoft.Network/firewallPolicies/ruleCollectionGroups",
-              "apiVersion": "2022-01-01",
+              "apiVersion": "2023-09-01",
               "name": "[format('{0}/{1}', format('afwp-{0}', parameters('resourceName')), 'AKSConstructionRuleGroup')]",
               "properties": {
                 "priority": 200,
@@ -7550,7 +7636,7 @@
       "condition": "[not(parameters('JustUseSystemPool'))]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2022-09-01",
-      "name": "userNodePool",
+      "name": "[take(format('{0}-userNodePool', deployment().name), 64)]",
       "properties": {
         "expressionEvaluationOptions": {
           "scope": "inner"
@@ -7589,11 +7675,12 @@
           "enableNodePublicIP": {
             "value": "[parameters('enableNodePublicIP')]"
           },
-          "osDiskSizeGB": {
-            "value": "[parameters('osDiskSizeGB')]"
-          },
+          "osDiskSizeGB": "[if(equals(parameters('osDiskSizeGB'), 0), createObject('value', variables('defaultOsDiskSizeGB')), createObject('value', parameters('osDiskSizeGB')))]",
           "availabilityZones": {
             "value": "[parameters('availabilityZones')]"
+          },
+          "spotInstance": {
+            "value": "[parameters('nodePoolSpot')]"
           }
         },
         "template": {
@@ -7602,8 +7689,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "16285738303785746192"
+              "version": "0.26.54.24096",
+              "templateHash": "16424776497471606172"
             }
           },
           "parameters": {
@@ -7682,6 +7769,7 @@
             },
             "podSubnetID": {
               "type": "string",
+              "defaultValue": "",
               "metadata": {
                 "description": "The subnet the pods will use"
               }
@@ -7699,6 +7787,7 @@
             "osSKU": {
               "type": "string",
               "allowedValues": [
+                "AzureLinux",
                 "Ubuntu",
                 "Windows2019",
                 "Windows2022"
@@ -7711,6 +7800,13 @@
                 "description": "Assign a public IP per node"
               }
             },
+            "spotInstance": {
+              "type": "bool",
+              "defaultValue": false,
+              "metadata": {
+                "description": "If the node pool should use VM spot instances"
+              }
+            },
             "autoTaintWindows": {
               "type": "bool",
               "defaultValue": false,
@@ -7721,36 +7817,20 @@
           },
           "variables": {
             "autoScale": "[greater(parameters('agentCountMax'), parameters('agentCount'))]",
-            "taints": "[if(parameters('autoTaintWindows'), union(parameters('nodeTaints'), createArray('sku=Windows:NoSchedule')), parameters('nodeTaints'))]"
+            "taints": "[if(parameters('autoTaintWindows'), union(parameters('nodeTaints'), createArray('sku=Windows:NoSchedule')), parameters('nodeTaints'))]",
+            "spotProperties": {
+              "scaleSetPriority": "Spot",
+              "scaleSetEvictionPolicy": "Delete",
+              "spotMaxPrice": -1
+            },
+            "defaultOsDiskSizeGB": "[if(equals(parameters('osType'), 'Linux'), 30, 100)]"
           },
           "resources": [
             {
               "type": "Microsoft.ContainerService/managedClusters/agentPools",
-              "apiVersion": "2021-10-01",
+              "apiVersion": "2024-01-01",
               "name": "[format('{0}/{1}', parameters('AksName'), parameters('PoolName'))]",
-              "properties": {
-                "mode": "User",
-                "vmSize": "[parameters('agentVMSize')]",
-                "count": "[parameters('agentCount')]",
-                "minCount": "[if(variables('autoScale'), parameters('agentCount'), null())]",
-                "maxCount": "[if(variables('autoScale'), parameters('agentCountMax'), null())]",
-                "enableAutoScaling": "[variables('autoScale')]",
-                "availabilityZones": "[if(not(empty(parameters('availabilityZones'))), parameters('availabilityZones'), null())]",
-                "osDiskType": "[parameters('osDiskType')]",
-                "osSKU": "[parameters('osSKU')]",
-                "osDiskSizeGB": "[parameters('osDiskSizeGB')]",
-                "osType": "[parameters('osType')]",
-                "maxPods": "[parameters('maxPods')]",
-                "type": "VirtualMachineScaleSets",
-                "vnetSubnetID": "[if(not(empty(parameters('subnetId'))), parameters('subnetId'), null())]",
-                "podSubnetID": "[if(not(empty(parameters('podSubnetID'))), parameters('podSubnetID'), null())]",
-                "upgradeSettings": {
-                  "maxSurge": "33%"
-                },
-                "nodeTaints": "[variables('taints')]",
-                "nodeLabels": "[parameters('nodeLabels')]",
-                "enableNodePublicIP": "[parameters('enableNodePublicIP')]"
-              }
+              "properties": "[union(createObject('mode', 'User', 'vmSize', parameters('agentVMSize'), 'count', parameters('agentCount'), 'minCount', if(variables('autoScale'), parameters('agentCount'), null()), 'maxCount', if(variables('autoScale'), parameters('agentCountMax'), null()), 'enableAutoScaling', variables('autoScale'), 'availabilityZones', if(not(empty(parameters('availabilityZones'))), parameters('availabilityZones'), null()), 'osDiskType', parameters('osDiskType'), 'osSKU', parameters('osSKU'), 'osDiskSizeGB', if(equals(parameters('osDiskSizeGB'), 0), variables('defaultOsDiskSizeGB'), parameters('osDiskSizeGB')), 'osType', parameters('osType'), 'maxPods', parameters('maxPods'), 'type', 'VirtualMachineScaleSets', 'vnetSubnetID', if(not(empty(parameters('subnetId'))), parameters('subnetId'), null()), 'podSubnetID', if(not(empty(parameters('podSubnetID'))), parameters('podSubnetID'), null()), 'upgradeSettings', if(parameters('spotInstance'), createObject(), createObject('maxSurge', '33%')), 'nodeTaints', variables('taints'), 'nodeLabels', parameters('nodeLabels'), 'enableNodePublicIP', parameters('enableNodePublicIP')), if(parameters('spotInstance'), variables('spotProperties'), createObject()))]"
             }
           ]
         }
@@ -7785,8 +7865,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "8151093183633396780"
+              "version": "0.26.54.24096",
+              "templateHash": "11633340609312379920"
             }
           },
           "parameters": {
@@ -7810,9 +7890,11 @@
             }
           },
           "variables": {
-            "dnsZoneRg": "[if(not(empty(parameters('dnsZoneId'))), split(parameters('dnsZoneId'), '/')[4], '')]",
-            "dnsZoneName": "[if(not(empty(parameters('dnsZoneId'))), split(parameters('dnsZoneId'), '/')[8], '')]",
-            "isDnsZonePrivate": "[if(not(empty(parameters('dnsZoneId'))), equals(split(parameters('dnsZoneId'), '/')[7], 'privateDnsZones'), false())]"
+            "dnsZoneIdSegments": "[split(parameters('dnsZoneId'), '/')]",
+            "dnsZoneSubscriptionId": "[if(not(empty(parameters('dnsZoneId'))), variables('dnsZoneIdSegments')[2], '')]",
+            "dnsZoneRg": "[if(not(empty(parameters('dnsZoneId'))), variables('dnsZoneIdSegments')[4], '')]",
+            "dnsZoneName": "[if(not(empty(parameters('dnsZoneId'))), variables('dnsZoneIdSegments')[8], '')]",
+            "isDnsZonePrivate": "[if(not(empty(parameters('dnsZoneId'))), equals(variables('dnsZoneIdSegments')[7], 'privateDnsZones'), false())]"
           },
           "resources": [
             {
@@ -7820,6 +7902,7 @@
               "type": "Microsoft.Resources/deployments",
               "apiVersion": "2022-09-01",
               "name": "[take(format('{0}-dns-{1}', deployment().name, variables('dnsZoneName')), 64)]",
+              "subscriptionId": "[variables('dnsZoneSubscriptionId')]",
               "resourceGroup": "[variables('dnsZoneRg')]",
               "properties": {
                 "expressionEvaluationOptions": {
@@ -7846,8 +7929,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "13108853651140059384"
+                      "version": "0.26.54.24096",
+                      "templateHash": "4736783265358516487"
                     }
                   },
                   "parameters": {
@@ -7897,7 +7980,7 @@
                     {
                       "condition": "[and(parameters('isPrivate'), not(empty(parameters('vnetId'))))]",
                       "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
-                      "apiVersion": "2020-06-01",
+                      "apiVersion": "2020-09-01",
                       "name": "[format('{0}/{1}', parameters('dnsZoneName'), 'privatedns')]",
                       "tags": {},
                       "location": "global",
@@ -7958,8 +8041,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "4678286989858322703"
+              "version": "0.26.54.24096",
+              "templateHash": "201736969119611975"
             }
           },
           "parameters": {
@@ -8726,7 +8809,7 @@
             },
             {
               "type": "Microsoft.Insights/scheduledQueryRules",
-              "apiVersion": "2022-06-15",
+              "apiVersion": "2022-08-01-preview",
               "name": "[format('Daily data cap breached for workspace {0} CIQ-1', parameters('logAnalyticsWorkspaceName'))]",
               "location": "[parameters('logAnalyticsWorkspaceLocation')]",
               "properties": {
@@ -8764,6 +8847,469 @@
         "[resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('resourceName')))]",
         "[resourceId('Microsoft.OperationalInsights/workspaces', variables('aks_law_name'))]"
       ]
+    },
+    {
+      "condition": "[not(empty(parameters('automationAccountScheduledStartStop')))]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2022-09-01",
+      "name": "[format('{0}-Automation', deployment().name)]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "automationAccountName": {
+            "value": "[format('aa-{0}', parameters('resourceName'))]"
+          },
+          "runbookName": {
+            "value": "aks-cluster-changestate"
+          },
+          "runbookUri": {
+            "value": "https://raw.githubusercontent.com/finoops/aks-cluster-changestate/main/aks-cluster-changestate.ps1"
+          },
+          "runbookType": {
+            "value": "Script"
+          },
+          "timezone": {
+            "value": "[parameters('automationTimeZone')]"
+          },
+          "schedulesToCreate": {
+            "value": [
+              {
+                "frequency": "[variables('automationFrequency')]",
+                "hour": "[parameters('automationStartHour')]",
+                "minute": 0
+              },
+              {
+                "frequency": "[variables('automationFrequency')]",
+                "hour": "[parameters('automationStopHour')]",
+                "minute": 0
+              }
+            ]
+          },
+          "runbookJobSchedule": {
+            "value": [
+              {
+                "scheduleName": "[format('{0} - {1}:00', variables('automationFrequency'), padLeft(parameters('automationStartHour'), 2, '0'))]",
+                "parameters": {
+                  "ResourceGroupName": "[resourceGroup().name]",
+                  "AksClusterName": "[format('aks-{0}', parameters('resourceName'))]",
+                  "Operation": "start"
+                }
+              },
+              {
+                "scheduleName": "[format('{0} - {1}:00', variables('automationFrequency'), padLeft(parameters('automationStopHour'), 2, '0'))]",
+                "parameters": {
+                  "ResourceGroupName": "[resourceGroup().name]",
+                  "AksClusterName": "[format('aks-{0}', parameters('resourceName'))]",
+                  "Operation": "stop"
+                }
+              }
+            ]
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "languageVersion": "2.0",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.26.54.24096",
+              "templateHash": "11707982972862085553"
+            }
+          },
+          "definitions": {
+            "schedule": {
+              "type": "object",
+              "properties": {
+                "frequency": {
+                  "type": "string",
+                  "allowedValues": [
+                    "Day",
+                    "Week",
+                    "Weekday"
+                  ]
+                },
+                "hour": {
+                  "$ref": "#/definitions/hour"
+                },
+                "minute": {
+                  "$ref": "#/definitions/minute"
+                }
+              }
+            },
+            "hour": {
+              "type": "int",
+              "minValue": 0,
+              "maxValue": 23,
+              "metadata": {
+                "description": "Seperately declaring as a type allows for min/max validation"
+              }
+            },
+            "minute": {
+              "type": "int",
+              "minValue": 0,
+              "maxValue": 59,
+              "metadata": {
+                "description": "Seperately declaring as a type allows for min/max validation"
+              }
+            },
+            "runbookJob": {
+              "type": "object",
+              "properties": {
+                "scheduleName": {
+                  "type": "string"
+                },
+                "parameters": {
+                  "type": "object",
+                  "nullable": true
+                }
+              }
+            }
+          },
+          "parameters": {
+            "automationAccountName": {
+              "type": "string",
+              "metadata": {
+                "description": "The name of the Automation Account"
+              }
+            },
+            "location": {
+              "type": "string",
+              "defaultValue": "[resourceGroup().location]",
+              "metadata": {
+                "description": "Deployment Location"
+              }
+            },
+            "today": {
+              "type": "string",
+              "defaultValue": "[utcNow('yyyyMMddTHHmmssZ')]",
+              "metadata": {
+                "description": "Used to reference todays date"
+              }
+            },
+            "timezone": {
+              "type": "string",
+              "defaultValue": "Etc/UTC",
+              "metadata": {
+                "description": "The timezone to align schedules to. (Eg. \"Europe/London\" or \"America/Los_Angeles\")"
+              }
+            },
+            "accountSku": {
+              "type": "string",
+              "defaultValue": "Basic",
+              "allowedValues": [
+                "Basic",
+                "Free"
+              ],
+              "metadata": {
+                "description": "The Automation Account SKU. See https://learn.microsoft.com/en-us/azure/automation/overview#pricing-for-azure-automation"
+              }
+            },
+            "loganalyticsWorkspaceId": {
+              "type": "string",
+              "defaultValue": "",
+              "metadata": {
+                "description": "For Automation job logging"
+              }
+            },
+            "diagnosticCategories": {
+              "type": "array",
+              "defaultValue": [
+                "JobLogs",
+                "JobStreams",
+                "AuditEvent"
+              ],
+              "metadata": {
+                "description": "Which logging categeories to log"
+              }
+            },
+            "schedulesToCreate": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/schedule"
+              },
+              "defaultValue": [
+                {
+                  "frequency": "Day",
+                  "hour": 9,
+                  "minute": 0
+                },
+                {
+                  "frequency": "Weekday",
+                  "hour": 9,
+                  "minute": 0
+                },
+                {
+                  "frequency": "Day",
+                  "hour": 19,
+                  "minute": 0
+                },
+                {
+                  "frequency": "Weekday",
+                  "hour": 19,
+                  "minute": 0
+                },
+                {
+                  "frequency": "Day",
+                  "hour": 0,
+                  "minute": 0
+                },
+                {
+                  "frequency": "Weekday",
+                  "hour": 0,
+                  "minute": 0
+                }
+              ],
+              "metadata": {
+                "description": "Automation Schedules to create"
+              }
+            },
+            "runbookJobSchedule": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/runbookJob"
+              },
+              "metadata": {
+                "description": "The Runbook-Schedule Jobs to create with workflow specific parameters"
+              }
+            },
+            "runbookName": {
+              "type": "string",
+              "metadata": {
+                "description": "The name of the runbook to create"
+              }
+            },
+            "runbookType": {
+              "type": "string",
+              "defaultValue": "Script",
+              "allowedValues": [
+                "GraphPowerShell",
+                "Script"
+              ],
+              "metadata": {
+                "description": "The type of runbook that is being imported"
+              }
+            },
+            "runbookUri": {
+              "type": "string",
+              "defaultValue": "",
+              "metadata": {
+                "description": "The URI to import the runbook code from"
+              }
+            },
+            "runbookDescription": {
+              "type": "string",
+              "defaultValue": "",
+              "metadata": {
+                "description": "A description of what the runbook does"
+              }
+            }
+          },
+          "variables": {
+            "runbookVersion": "1.0.0.0",
+            "tomorrow": "[dateTimeAdd(parameters('today'), 'P1D', 'yyyy-MM-dd')]",
+            "timebase": "1900-01-01",
+            "scheduleNoExpiry": "9999-12-31T23:59:00+00:00",
+            "workWeek": {
+              "weekDays": [
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday"
+              ]
+            }
+          },
+          "resources": {
+            "automationAccount": {
+              "type": "Microsoft.Automation/automationAccounts",
+              "apiVersion": "2022-08-08",
+              "name": "[parameters('automationAccountName')]",
+              "location": "[parameters('location')]",
+              "identity": {
+                "type": "SystemAssigned"
+              },
+              "properties": {
+                "sku": {
+                  "name": "[parameters('accountSku')]"
+                }
+              }
+            },
+            "automationAccountDiagLogging": {
+              "condition": "[not(empty(parameters('loganalyticsWorkspaceId')))]",
+              "type": "Microsoft.Insights/diagnosticSettings",
+              "apiVersion": "2021-05-01-preview",
+              "scope": "[format('Microsoft.Automation/automationAccounts/{0}', parameters('automationAccountName'))]",
+              "name": "diags",
+              "properties": {
+                "copy": [
+                  {
+                    "name": "logs",
+                    "count": "[length(parameters('diagnosticCategories'))]",
+                    "input": {
+                      "category": "[parameters('diagnosticCategories')[copyIndex('logs')]]",
+                      "enabled": true
+                    }
+                  }
+                ],
+                "workspaceId": "[parameters('loganalyticsWorkspaceId')]"
+              },
+              "dependsOn": [
+                "automationAccount"
+              ]
+            },
+            "schedules": {
+              "copy": {
+                "name": "schedules",
+                "count": "[length(parameters('schedulesToCreate'))]"
+              },
+              "type": "Microsoft.Automation/automationAccounts/schedules",
+              "apiVersion": "2022-08-08",
+              "name": "[format('{0}/{1}', parameters('automationAccountName'), format('{0} - {1}:{2}', parameters('schedulesToCreate')[copyIndex()].frequency, dateTimeAdd(variables('timebase'), format('PT{0}H', parameters('schedulesToCreate')[copyIndex()].hour), 'HH'), dateTimeAdd(variables('timebase'), format('PT{0}M', parameters('schedulesToCreate')[copyIndex()].minute), 'mm')))]",
+              "properties": {
+                "startTime": "[dateTimeAdd(dateTimeAdd(variables('tomorrow'), format('PT{0}H', parameters('schedulesToCreate')[copyIndex()].hour)), format('PT{0}M', parameters('schedulesToCreate')[copyIndex()].minute), 'yyyy-MM-ddTHH:mm:00+00:00')]",
+                "expiryTime": "[variables('scheduleNoExpiry')]",
+                "interval": 1,
+                "frequency": "[if(equals(parameters('schedulesToCreate')[copyIndex()].frequency, 'Day'), 'Day', 'Week')]",
+                "timeZone": "[parameters('timezone')]",
+                "advancedSchedule": "[if(equals(parameters('schedulesToCreate')[copyIndex()].frequency, 'Weekday'), variables('workWeek'), createObject())]"
+              },
+              "dependsOn": [
+                "automationAccount"
+              ]
+            },
+            "runbook": {
+              "condition": "[not(empty(parameters('runbookName')))]",
+              "type": "Microsoft.Automation/automationAccounts/runbooks",
+              "apiVersion": "2022-08-08",
+              "name": "[format('{0}/{1}', parameters('automationAccountName'), if(not(empty(parameters('runbookName'))), parameters('runbookName'), 'armtemplatevalidationissue'))]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "logVerbose": true,
+                "logProgress": true,
+                "runbookType": "[parameters('runbookType')]",
+                "publishContentLink": {
+                  "uri": "[parameters('runbookUri')]",
+                  "version": "[variables('runbookVersion')]"
+                },
+                "description": "[parameters('runbookDescription')]"
+              },
+              "dependsOn": [
+                "automationAccount"
+              ]
+            },
+            "automationJobs": {
+              "copy": {
+                "name": "automationJobs",
+                "count": "[length(parameters('runbookJobSchedule'))]"
+              },
+              "condition": "[not(empty(parameters('runbookName')))]",
+              "type": "Microsoft.Automation/automationAccounts/jobSchedules",
+              "apiVersion": "2022-08-08",
+              "name": "[format('{0}/{1}', parameters('automationAccountName'), guid(resourceId('Microsoft.Automation/automationAccounts', parameters('automationAccountName')), if(not(empty(parameters('runbookName'))), parameters('runbookName'), 'armtemplatevalidationissue'), parameters('runbookJobSchedule')[copyIndex()].scheduleName))]",
+              "properties": {
+                "schedule": {
+                  "name": "[parameters('runbookJobSchedule')[copyIndex()].scheduleName]"
+                },
+                "runbook": {
+                  "name": "[if(not(empty(parameters('runbookName'))), parameters('runbookName'), 'armtemplatevalidationissue')]"
+                },
+                "parameters": "[parameters('runbookJobSchedule')[copyIndex()].parameters]"
+              },
+              "dependsOn": [
+                "automationAccount",
+                "runbook",
+                "schedules"
+              ]
+            }
+          },
+          "outputs": {
+            "automationAccountId": {
+              "type": "string",
+              "metadata": {
+                "description": "The Automation Account resource Id"
+              },
+              "value": "[resourceId('Microsoft.Automation/automationAccounts', parameters('automationAccountName'))]"
+            },
+            "automationAccountPrincipalId": {
+              "type": "string",
+              "metadata": {
+                "description": "The Automation Account identity Principal Id"
+              },
+              "value": "[reference('automationAccount', '2022-08-08', 'full').identity.principalId]"
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('resourceName')))]"
+      ]
+    },
+    {
+      "condition": "[not(empty(parameters('automationAccountScheduledStartStop')))]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2022-09-01",
+      "name": "[format('{0}-AutomationRbac', deployment().name)]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "aksName": {
+            "value": "[format('aks-{0}', parameters('resourceName'))]"
+          },
+          "principalId": "[if(not(empty(parameters('automationAccountScheduledStartStop'))), createObject('value', reference(resourceId('Microsoft.Resources/deployments', format('{0}-Automation', deployment().name)), '2022-09-01').outputs.automationAccountPrincipalId.value), createObject('value', ''))]"
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.26.54.24096",
+              "templateHash": "3483134545582176875"
+            }
+          },
+          "parameters": {
+            "principalId": {
+              "type": "string"
+            },
+            "aksName": {
+              "type": "string"
+            }
+          },
+          "variables": {
+            "aksContributor": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]"
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Authorization/roleAssignments",
+              "apiVersion": "2022-04-01",
+              "scope": "[format('Microsoft.ContainerService/managedClusters/{0}', parameters('aksName'))]",
+              "name": "[guid(resourceId('Microsoft.ContainerService/managedClusters', parameters('aksName')), parameters('principalId'), variables('aksContributor'))]",
+              "properties": {
+                "roleDefinitionId": "[variables('aksContributor')]",
+                "principalType": "ServicePrincipal",
+                "principalId": "[parameters('principalId')]"
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('resourceName')))]",
+        "[resourceId('Microsoft.Resources/deployments', format('{0}-Automation', deployment().name))]"
+      ],
+      "metadata": {
+        "description": "Gives the Automation Account permission to stop/start the AKS cluster"
+      }
     }
   ],
   "outputs": {
@@ -8823,11 +9369,11 @@
     },
     "privateFQDN": {
       "type": "string",
-      "value": "[if(and(parameters('enablePrivateCluster'), not(equals(parameters('privateClusterDnsMethod'), 'none'))), reference(resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('resourceName'))), '2023-03-02-preview').privateFQDN, '')]"
+      "value": "[if(and(parameters('enablePrivateCluster'), not(equals(parameters('privateClusterDnsMethod'), 'none'))), reference(resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('resourceName'))), '2024-01-01').privateFQDN, '')]"
     },
     "aksPrivateDnsZoneName": {
       "type": "string",
-      "value": "[if(and(parameters('enablePrivateCluster'), not(equals(parameters('privateClusterDnsMethod'), 'none'))), join(skip(split(reference(resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('resourceName'))), '2023-03-02-preview').privateFQDN, '.'), 1), '.'), '')]"
+      "value": "[if(and(parameters('enablePrivateCluster'), not(equals(parameters('privateClusterDnsMethod'), 'none'))), join(skip(split(reference(resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('resourceName'))), '2024-01-01').privateFQDN, '.'), 1), '.'), '')]"
     },
     "aksClusterName": {
       "type": "string",
@@ -8835,7 +9381,7 @@
     },
     "aksOidcIssuerUrl": {
       "type": "string",
-      "value": "[if(parameters('oidcIssuer'), reference(resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('resourceName'))), '2023-03-02-preview').oidcIssuerProfile.issuerURL, '')]"
+      "value": "[if(parameters('oidcIssuer'), reference(resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('resourceName'))), '2024-01-01').oidcIssuerProfile.issuerURL, '')]"
     },
     "aksOidcFedIdentityProperties": {
       "type": "object",
@@ -8843,7 +9389,7 @@
         "description": "This output can be directly leveraged when creating a ManagedId Federated Identity"
       },
       "value": {
-        "issuer": "[if(parameters('oidcIssuer'), reference(resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('resourceName'))), '2023-03-02-preview').oidcIssuerProfile.issuerURL, '')]",
+        "issuer": "[if(parameters('oidcIssuer'), reference(resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('resourceName'))), '2024-01-01').oidcIssuerProfile.issuerURL, '')]",
         "audiences": [
           "api://AzureADTokenExchange"
         ],
@@ -8855,7 +9401,7 @@
       "metadata": {
         "description": "The name of the managed resource group AKS uses"
       },
-      "value": "[reference(resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('resourceName'))), '2023-03-02-preview').nodeResourceGroup]"
+      "value": "[reference(resourceId('Microsoft.ContainerService/managedClusters', format('aks-{0}', parameters('resourceName'))), '2024-01-01').nodeResourceGroup]"
     },
     "aksResourceId": {
       "type": "string",
